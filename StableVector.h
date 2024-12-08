@@ -7,6 +7,12 @@ namespace labbish {
 	template <typename T>
 	class StableVector :public std::forward_list<T> {
 	public:
+		inline StableVector(const std::initializer_list<T>& init) :std::forward_list<T>() {
+			auto it = this->before_begin();
+			for (const T& value : init) {
+				it = this->insert_after(it, value);
+			}
+		}
 		inline size_t size() const {
 			return std::distance(this->begin(), this->end());
 		}
@@ -74,6 +80,22 @@ namespace labbish {
 				++currentIndex;
 			}
 			this->erase_after(it);
+		}
+		inline void insert(size_t index, const T& value) {
+			if (index > this->size()) {
+				throw std::out_of_range(std::format("StableVector index out of range: {}", index));
+			}
+			if (index == 0) {
+				this->push_front(value);
+				return;
+			}
+			auto it = this->begin();
+			size_t currentIndex = 0;
+			while (currentIndex < index - 1) {
+				++it;
+				++currentIndex;
+			}
+			this->insert_after(it, value);
 		}
 	};
 }
