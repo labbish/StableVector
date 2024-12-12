@@ -7,6 +7,7 @@ namespace labbish {
 	template <typename T>
 	class StableVector :public std::forward_list<T> {
 	public:
+		inline StableVector() = default;
 		inline StableVector(const std::initializer_list<T>& init) :std::forward_list<T>() {
 			auto it = this->before_begin();
 			for (const T& value : init) {
